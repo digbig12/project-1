@@ -97,4 +97,4 @@ The BI Assistant is a premium financial intelligence chatbot with:
 
 ---
 
-Built by Satendra Singh with Antigravity AI.
+
