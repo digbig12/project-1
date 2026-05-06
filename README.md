@@ -2,7 +2,7 @@
 
 A premium, AI-powered business analytics dashboard built with Next.js, Gemini AI, and Prisma.
 
-## 🚀 Features
+##  Features
 
 - **AI Executive Summary**: Get instant strategic insights from your dashboard data.
 - **Financial Assistant**: A context-aware chat interface to query your business performance.
@@ -11,26 +11,26 @@ A premium, AI-powered business analytics dashboard built with Next.js, Gemini AI
 - **Personalized Dashboard**: Greets you by your company name after registration.
 - **Premium UI**: Modern glassmorphism design with responsive charts and animations.
 
-### 🤖 AI Chat Assistant — Enhanced
+###  AI Chat Assistant — Enhanced
 
 The BI Assistant is a premium financial intelligence chatbot with:
 
 | Feature | Description |
 |---|---|
-| 📊 Rich Tables | Financial data rendered in structured markdown tables |
-| 💬 Persistent History | Chat threads saved to database, survives page refresh |
-| ⚡ Quick Start Cards | 6 one-click suggestion tiles for common queries |
-| 🧠 Dynamic Thinking | Animated indicator cycling through contextual status messages |
-| 🔗 Follow-up Chips | Context-aware suggestions after each AI response |
-| 📥 Export Chat | Download entire conversation as a `.txt` file |
-| ⌨️ Keyboard Shortcuts | `/` to focus input, `Esc` to blur |
-| 🗑️ Conversation Management | Delete old threads, start new chats |
-| 🖥️ Fullscreen Mode | Expand chat to fill the viewport |
-| 📋 Copy Responses | One-click copy any AI response |
+|  Rich Tables | Financial data rendered in structured markdown tables |
+|  Persistent History | Chat threads saved to database, survives page refresh |
+|  Quick Start Cards | 6 one-click suggestion tiles for common queries |
+|  Dynamic Thinking | Animated indicator cycling through contextual status messages |
+|  Follow-up Chips | Context-aware suggestions after each AI response |
+|  Export Chat | Download entire conversation as a `.txt` file |
+|  Keyboard Shortcuts | `/` to focus input, `Esc` to blur |
+|  Conversation Management | Delete old threads, start new chats |
+|  Fullscreen Mode | Expand chat to fill the viewport |
+|  Copy Responses | One-click copy any AI response |
 
 **Supported Queries**: Revenue overview, expense breakdown, monthly performance, profit margin analysis, 3-month forecast, tax estimation (India), hiring capacity analysis, cost optimization strategies.
 
-## 🛠️ Tech Stack
+##  Tech Stack
 
 - **Framework**: Next.js 16 (App Router)
 - **AI Engine**: Vercel AI SDK v6 & Google Gemini (with local fallback engine)
@@ -39,7 +39,7 @@ The BI Assistant is a premium financial intelligence chatbot with:
 - **Charts**: Recharts
 - **Auth**: NextAuth v5 with 2FA support
 
-## 📋 Setup Instructions
+##  Setup Instructions
 
 1. **Install Dependencies**:
    ```bash
@@ -72,14 +72,14 @@ The BI Assistant is a premium financial intelligence chatbot with:
    npm run build
    ```
 
-## ☁️ Deploy to Vercel
+##  Deploy to Vercel
 
 1. Push to GitHub
 2. Import project in [vercel.com](https://vercel.com)
 3. Add environment variables in Vercel dashboard (from `.env.example`)
 4. Deploy — `prisma generate` runs automatically via `postinstall` script
 
-## 📂 Project Structure
+##  Project Structure
 
 - `src/app` — Application routes and pages
 - `src/app/chat` — AI Chat Assistant with history sidebar
@@ -88,7 +88,7 @@ The BI Assistant is a premium financial intelligence chatbot with:
 - `src/lib` — Database client, server actions, and utility functions
 - `prisma` — Database schema (User, Transaction, Category, Conversation, ChatMessage)
 
-## 🔑 Keyboard Shortcuts
+##  Keyboard Shortcuts
 
 | Key | Action |
 |---|---|
