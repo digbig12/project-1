@@ -1,0 +1,209 @@
+datasource db {
+  provider = "sqlite"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id                    String    @id @default(cuid())
+  name                  String?
+  email                 String?   @unique
+  password              String?
+  image                 String?
+  companyName           String?
+  isTwoFactorEnabled    Boolean   @default(false)
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  // Subscription Details
+  stripeCustomerId       String?   @unique
+  stripeSubscriptionId   String?   @unique
+  stripePriceId          String?
+  stripeCurrentPeriodEnd DateTime?
+  plan                   String?   @default("FREE") // FREE or ADVANCED
+
+  // Personal Info
+  phone                 String?
+  role                  String?   // CEO, Accountant, etc.
+
+  // Business Info
+  industry              String?   // IT, Retail, Manufacturing, etc.
+  businessType          String?   // Sole Proprietorship, Pvt Ltd, LLP
+  companySize           String?   // 1-10, 11-50, 51-200, 200+
+  gstNumber             String?
+  panNumber             String?
+  financialYearStart    String?   @default("april")
+
+  // Address
+  addressLine1          String?
+  addressLine2          String?
+  city                  String?
+  state                 String?
+  pinCode               String?
+  country               String?   @default("India")
+  // AI Training & Intelligence
+  aiContext             String?   // Description of business model, goals, challenges
+  aiTone                String?   @default("CFO") // CFO, Advisor, Friendly, Direct
+  targetRevenue         Float?    @default(100000)
+  maxExpenseRatio       Float?    @default(70)
+  businessGoals         String?   // Comma separated or JSON string of specific goals
+  
+  transactions  Transaction[]
+  categories    Category[]
+  insights      MonthlyInsight[]
+  twoFactorTokens TwoFactorToken[]
+  passwordResetTokens PasswordResetToken[]
+  conversations Conversation[]
+  invoices      Invoice[]
+  budgets       Budget[]
+  recurringTransactions RecurringTransaction[]
+}
+
+model Transaction {
+  id              String   @id @default(cuid())
+  amount          Float
+  type            String   // SALE, EXPENSE
+  date            DateTime @default(now())
+  description     String?
+  isTaxDeductible Boolean  @default(false)
+  taxReason       String?
+  
+  categoryId      String
+  category        Category @relation(fields: [categoryId], references: [id])
+  
+  userId          String
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Category {
+  id           String        @id @default(cuid())
+  name         String
+  icon         String?
+  color        String?
+  transactions Transaction[]
+  
+  // Hierarchy
+  parentId     String?
+  parent       Category?     @relation("SubCategories", fields: [parentId], references: [id], onDelete: SetNull)
+  subCategories Category[]    @relation("SubCategories")
+
+  userId       String
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  budgets      Budget[]
+  recurringTransactions RecurringTransaction[]
+}
+
+model MonthlyInsight {
+  id        String   @id @default(cuid())
+  month     Int
+  year      Int
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model TwoFactorToken {
+  id        String   @id @default(cuid())
+  token     String
+  expires   DateTime
+  
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@unique([userId, token])
+}
+
+model PasswordResetToken {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  expires   DateTime
+  
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@unique([userId, token])
+}
+
+model Conversation {
+  id        String   @id @default(cuid())
+  title     String   @default("New Chat")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  messages  ChatMessage[]
+}
+
+model ChatMessage {
+  id             String   @id @default(cuid())
+  role           String   // user, assistant
+  content        String
+  createdAt      DateTime @default(now())
+  
+  conversationId String
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+}
+
+model Invoice {
+  id              String   @id @default(cuid())
+  invoiceNumber   String
+  clientName      String
+  clientEmail     String?
+  clientAddress   String?
+  clientGST       String?
+  items           String   // JSON array of line items
+  subtotal        Float
+  taxRate         Float    @default(18)
+  taxAmount       Float
+  total           Float
+  status          String   @default("DRAFT") // DRAFT, SENT, PAID
+  dueDate         DateTime?
+  notes           String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  userId          String
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Budget {
+  id             String   @id @default(cuid())
+  monthlyLimit   Float
+  month          Int
+  year           Int
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  categoryId     String
+  category       Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  
+  userId         String
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, categoryId, month, year])
+}
+
+model RecurringTransaction {
+  id              String   @id @default(cuid())
+  amount          Float
+  type            String   // SALE, EXPENSE
+  description     String
+  frequency       String   // DAILY, WEEKLY, MONTHLY, YEARLY
+  nextDueDate     DateTime
+  isActive        Boolean  @default(true)
+  lastProcessed   DateTime?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  categoryId      String
+  category        Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  
+  userId          String
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
